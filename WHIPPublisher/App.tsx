@@ -18,17 +18,27 @@ import {
 // See https://ossrs.io/lts/en-us/docs/v5/doc/webrtc#http-api
 const WHIPUrl = 'http://192.168.1.100:1985/rtc/v1/whip/?app=live&stream=livestream';
 
+// react-native-webrtc 124.0.7's public export does not surface the peer
+// connection's inherited addEventListener overloads or its event map/track
+// event types. Describe locally only the listener signature App uses; keep
+// the assertion narrow and reuse public runtime behavior.
+type PCEventListener = (
+  type: 'iceconnectionstatechange',
+  listener: (event: { readonly type: string }) => void,
+) => void;
+type PCWithListener = RTCPeerConnection & { addEventListener: PCEventListener };
+
 function App(): React.JSX.Element {
-  const [pc, setPC] = React.useState<RTCPeerConnection>(null);
+  const [pc, setPC] = React.useState<RTCPeerConnection | null>(null);
   const [stream, setStream] = React.useState<MediaStream | null>(null);
 
   const startPublishing = React.useCallback(async () => {
-    const peerConnection = new RTCPeerConnection(null);
+    const peerConnection = new RTCPeerConnection() as PCWithListener;
     console.log('peerConnection', peerConnection);
     setPC(peerConnection);
 
     // See https://github.com/react-native-webrtc/react-native-webrtc/blob/master/Documentation/BasicUsage.md#creating-a-peer-connection
-    peerConnection.addEventListener('iceconnectionstatechange', event => {
+    peerConnection.addEventListener('iceconnectionstatechange', (event) => {
       console.log(`event iceconnectionstatechange: ${JSON.stringify(event)}`);
     });
 
@@ -41,7 +51,7 @@ function App(): React.JSX.Element {
 
     mediaStream.getTracks().forEach((track) => {
       peerConnection.addTrack(track);
-      console.log(`track ${track.id} ${track.kind} added to pc ${peerConnection._pcId}`);
+      console.log(`track ${track.id} ${track.kind} added to pc`);
     });
 
     const offer = await peerConnection.createOffer();
@@ -71,7 +81,7 @@ function App(): React.JSX.Element {
   const stopPublishing = React.useCallback(async () => {
     if (pc) {
       pc.close();
-      console.log(`pc ${pc._pcId} closed`);
+      console.log(`pc closed`);
     }
 
     if (stream) {
