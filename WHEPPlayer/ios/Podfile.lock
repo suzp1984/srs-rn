@@ -2141,7 +2141,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   FBLazyVector: b3e7ad108f0d882e30445c5527d774e3fd432f3d
-  hermes-engine: db55542b9c4aa4d73fd7f314c76fd42fe048f70b
+  hermes-engine: 2777f5bb1b9afc67280562afa1a49c2e56f9bf47
   JitsiWebRTC: b47805ab5668be38e7ee60e2258f49badfe8e1d0
   RCTDeprecation: 2a74a2c57675e64419bd89078efde81f7c1de90b
   RCTRequired: 30451112e6fef4e6f31b4e7eee0845156e35e4b0
