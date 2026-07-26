@@ -125,12 +125,13 @@ Only one media screen can be mounted at a time. Returning from Publisher or Play
 2. `WhepUrlScreen` displays an editable field initialized with the current `WHEPPlayer` default URL.
 3. The screen accepts only syntactically valid HTTP or HTTPS URLs.
 4. A valid submission navigates to Player with the URL route parameter.
-5. Player starts only when the user presses Start.
-6. Player creates receive-only audio and video transceivers.
-7. It creates a local SDP offer, applies it locally, and POSTs the SDP to the selected endpoint with `Content-Type: application/sdp`.
-8. It reads the successful response body as plain-text answer SDP and applies it as the remote description.
-9. Remote tracks are collected into a media stream and rendered through `RTCView`.
-10. Stop, navigation away, unmount, or partial-start failure closes the peer connection and releases remote stream tracks.
+5. Player starts only when the user presses Start. Entering Player does not create a peer connection or begin negotiation.
+6. This explicit Start action is an intentional unified-application UX change from the standalone WHEP player, which starts on mount. Preserved WHEP behavior means its default and editable URL flow, receive-only negotiation, remote rendering, error handling, and teardown—not its legacy auto-start timing.
+7. Player creates receive-only audio and video transceivers.
+8. It creates a local SDP offer, applies it locally, and POSTs the SDP to the selected endpoint with `Content-Type: application/sdp`.
+9. It reads the successful response body as plain-text answer SDP and applies it as the remote description.
+10. Remote tracks are collected into a media stream and rendered through `RTCView`.
+11. Stop, navigation away, unmount, or partial-start failure closes the peer connection and releases remote stream tracks.
 
 ## Session Lifecycle
 
@@ -139,11 +140,15 @@ Each media screen owns its session state; there is no global peer connection or 
 The lifecycle rules are:
 
 - Start is explicit and guarded against duplicate requests.
+- Each accepted Start creates one uniquely identified session attempt.
 - A second concurrent session cannot be started from the same screen.
-- Stop is safe to invoke more than once.
-- Unmount cleanup is safe after either a successful or failed start.
+- Stop, navigation away, unmount, retry, or startup failure marks the current attempt obsolete before cleanup begins.
+- An obsolete attempt must not install a peer connection or stream, apply a remote description, report a result to the current UI, or otherwise update screen state.
+- The in-flight SDP HTTP request is aborted when the runtime supports cancellation. Operations that cannot be aborted may settle, but their results are ignored and any resources they acquired are released immediately.
+- Cleanup closes the attempt's peer connection, stops all local or remote tracks owned by that attempt, clears its resource references, and is safe to invoke more than once.
 - Partial setup is cleaned up if any later setup step fails.
-- State is not updated after the owning screen has unmounted.
+- A stale attempt cannot replace, close, or otherwise interfere with resources owned by a newer attempt.
+- After cancellation or failure, a still-mounted screen is ready for a fresh Start.
 - No session remains active after leaving Publisher or Player.
 
 ## Error Handling
@@ -214,19 +219,25 @@ For each feature:
 
 WHIP tests cover:
 
+- No peer connection, media acquisition, or negotiation before Start.
 - Send-only audio and video transceivers.
 - Camera and microphone acquisition.
 - Local-track attachment and preview.
 - SDP request and answer handling.
-- Duplicate-start protection.
+- Rapid repeated Start presses create only one attempt.
+- Stop and unmount during media acquisition, SDP creation, HTTP negotiation, and answer application leave no active session.
+- Completion of an obsolete attempt does not update UI state or replace resources owned by a newer attempt.
 - Cleanup after failure, Stop, and unmount.
 
 WHEP tests cover:
 
+- No peer connection or negotiation before Start.
 - Receive-only audio and video transceivers.
 - Remote-track handling and rendering.
 - SDP request and answer handling.
-- Duplicate-start protection.
+- Rapid repeated Start presses create only one attempt.
+- Stop and unmount during SDP creation, HTTP negotiation, and answer application leave no active session.
+- Completion of an obsolete attempt does not update UI state or replace resources owned by a newer attempt.
 - Cleanup after failure, Stop, and unmount.
 
 Both test suites cover visible HTTP, network, and SDP errors.
@@ -256,7 +267,7 @@ Required iOS functional checks:
 1. Launch into the protocol-grid Home page.
 2. Open WHIP, retain or edit its URL, start publishing camera and microphone media, and stop cleanly.
 3. Return Home and confirm publishing has ended.
-4. Open WHEP, retain or edit its URL, receive remote media, and stop cleanly.
+4. Open WHEP, retain or edit its URL, press Start, receive remote media, and stop cleanly.
 5. Confirm navigation away ends playback.
 6. Confirm permission denial and unreachable-server errors are understandable and recoverable.
 
@@ -270,7 +281,7 @@ The work is complete when:
 - `WHIPPublisher/` and `WHEPPlayer/` remain unchanged.
 - SRS RN launches into the protocol-grid Home screen.
 - The WHIP flow preserves the current editable default URL and publishing behavior.
-- The WHEP flow preserves the current editable default URL and playback behavior.
+- The WHEP flow preserves the current editable default URL, receive-only negotiation, remote rendering, error handling, and teardown while intentionally replacing standalone auto-start with explicit Start.
 - Stop and navigation-away teardown prevent more than one active media session.
 - User-visible failures are recoverable and partial resources are released.
 - TypeScript, lint, and Jest checks pass.
