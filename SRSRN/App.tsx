@@ -1,24 +1,7 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import 'react-native-gesture-handler';
+import React from 'react';
+import {RootNavigator} from './navigation/RootNavigator';
 
-import {StyleSheet, Text, View} from 'react-native';
-
-function App() {
-  return (
-    <View style={styles.container}>
-      <Text>SRS RN</Text>
-    </View>
-  );
+export default function App(): React.JSX.Element {
+  return <RootNavigator />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
-
-export default App;
