@@ -239,6 +239,23 @@ describe('PlayerScreen - obsolete attempt isolation', () => {
     expect(pcB.close).not.toHaveBeenCalled();
     expect(hasVideo(tree.root)).toBe(false);
   });
+
+  it('a stale attempt late-arriving remote track does not render or replace the current UI', async () => {
+    const tree = render();
+    await pressStart(tree); // attempt A
+    const pcA = webrtc.__mockPCInstances[0];
+    ReactTestRenderer.act(() => {
+      findByTestID(tree.root, 'player-stop').props.onPress();
+    });
+    await pressStart(tree); // attempt B
+    const pcB = webrtc.__mockPCInstances[1];
+    // Stale attempt A's late-arriving remote track must not update UI or
+    // disturb the active attempt B - the isCurrent(attempt) guard in the
+    // track listener should short-circuit setStream.
+    fireTrackEvent(pcA, {id: 'stale-video', kind: 'video', stop: jest.fn()});
+    expect(hasVideo(tree.root)).toBe(false);
+    expect(pcB.close).not.toHaveBeenCalled();
+  });
 });
 
 describe('PlayerScreen - visible errors', () => {

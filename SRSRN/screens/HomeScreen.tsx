@@ -29,6 +29,7 @@ export function HomeScreen({navigation, features}: Props): React.JSX.Element {
         data={list}
         keyExtractor={item => item.id}
         renderItem={renderItem}
+        numColumns={2}
       />
     </View>
   );
@@ -36,7 +37,7 @@ export function HomeScreen({navigation, features}: Props): React.JSX.Element {
 
 const styles = StyleSheet.create({
   container: {padding: 16},
-  card: {borderWidth: 2, borderRadius: 8, padding: 12, marginBottom: 12, gap: 8},
+  card: {flex: 1, borderWidth: 2, borderRadius: 8, padding: 12, marginBottom: 12, gap: 8},
   title: {fontSize: 16, fontWeight: '700'},
   description: {fontSize: 14, color: '#444'},
 });
