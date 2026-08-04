@@ -4,4 +4,6 @@ export type RootStackParamList = {
   Publisher: {whipUrl: string};
   WhepUrl: undefined;
   Player: {whepUrl: string};
+  HlsUrl: undefined;
+  HlsPlayer: {hlsUrl: string};
 };
