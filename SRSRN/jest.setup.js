@@ -72,3 +72,55 @@ jest.mock('react-native-webrtc', () => {
     },
   };
 });
+
+jest.mock('react-native-video', () => {
+  const React = require('react');
+  const mockVideoInstances = [];
+
+  function makeInstance() {
+    const instance = {
+      seek: jest.fn(),
+      __onLoad: null,
+      __onError: null,
+      __fireOnLoad(payload) {
+        if (instance.__onLoad) {
+          instance.__onLoad(payload);
+        }
+      },
+      __fireOnError(payload) {
+        if (instance.__onError) {
+          instance.__onError(payload);
+        }
+      },
+    };
+    mockVideoInstances.push(instance);
+    return instance;
+  }
+
+  const Video = React.forwardRef((props, ref) => {
+    const instanceRef = React.useRef(null);
+    if (instanceRef.current === null) {
+      instanceRef.current = makeInstance();
+    }
+    const instance = instanceRef.current;
+    // Re-bind the latest onLoad/onError on every render so a per-attempt
+    // closure (see useHlsSession) is what __fireOnLoad/__fireOnError invokes.
+    instance.__onLoad = props.onLoad;
+    instance.__onError = props.onError;
+    React.useImperativeHandle(ref, () => instance, []);
+    // NOTE: deliberately no cleanup effect that nulls __onLoad/__onError -
+    // tests must be able to fire late events on a stale/unmounted instance to
+    // verify the isCurrent guard drops them.
+    return React.createElement('Video', {testID: props.testID});
+  });
+
+  return {
+    __esModule: true,
+    default: Video,
+    Video,
+    __mockVideoInstances: mockVideoInstances,
+    __resetVideoMocks() {
+      mockVideoInstances.length = 0;
+    },
+  };
+});
