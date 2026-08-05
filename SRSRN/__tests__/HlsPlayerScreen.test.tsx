@@ -180,3 +180,63 @@ describe('HlsPlayerScreen - visible errors', () => {
     expect(hasVideo(tree.root)).toBe(false);
   });
 });
+
+describe('HlsPlayerScreen - idempotent cleanup and recovery', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    video.__resetVideoMocks();
+  });
+
+  it('Stop then unmount is idempotent: no double-cleanup, no throw on late events', async () => {
+    const tree = render();
+    await pressStart(tree);
+    const instance = video.__mockVideoInstances[0];
+    pressStop(tree); // cleanupAttempt(attempt) + attemptRef=null + status='idle'
+    // Unmount right after Stop: the useEffect teardown finds attemptRef null and
+    // skips cleanupAttempt. Must not throw or double-clean.
+    expect(() => {
+      ReactTestRenderer.act(() => tree.unmount());
+    }).not.toThrow();
+    // Late events on the stopped/unmounted instance must not throw (isCurrent
+    // guard: attemptRef is null, so the closure short-circuits before setState).
+    expect(() => {
+      ReactTestRenderer.act(() => instance.__fireOnLoad({}));
+    }).not.toThrow();
+    expect(() => {
+      ReactTestRenderer.act(() =>
+        instance.__fireOnError({
+          error: {errorString: 'late', localizedDescription: 'late'},
+        }),
+      );
+    }).not.toThrow();
+  });
+
+  it('a failed start leaves the screen ready for a fresh Start', async () => {
+    const tree = render();
+    await pressStart(tree); // attempt A
+    ReactTestRenderer.act(() => {
+      video.__mockVideoInstances[0].__fireOnError({
+        error: {
+          errorString: 'first attempt failed',
+          localizedDescription: 'first attempt failed',
+        },
+      });
+    });
+    // Failure -> status='error', Start button back, error shown, Video unmounted.
+    expect(findByTestID(tree.root, 'hls-player-error').props.children).toContain('first attempt');
+    expect(hasVideo(tree.root)).toBe(false);
+    expect(tree.root.findAllByProps({testID: 'hls-player-start'}).length).toBeGreaterThan(0);
+    // Fresh Start: onError nulled attemptRef, so start() creates a new attempt.
+    await pressStart(tree); // attempt B
+    expect(hasVideo(tree.root)).toBe(true);
+    expect(video.__mockVideoInstances.length).toBe(2);
+    // The previous error is cleared on the fresh Start.
+    expect(hasError(tree.root)).toBe(false);
+    // B loads successfully.
+    ReactTestRenderer.act(() => {
+      video.__mockVideoInstances[1].__fireOnLoad({});
+    });
+    expect(hasVideo(tree.root)).toBe(true);
+    expect(hasError(tree.root)).toBe(false);
+  });
+});
