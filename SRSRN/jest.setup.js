@@ -107,7 +107,7 @@ jest.mock('react-native-video', () => {
     // closure (see useHlsSession) is what __fireOnLoad/__fireOnError invokes.
     instance.__onLoad = props.onLoad;
     instance.__onError = props.onError;
-    React.useImperativeHandle(ref, () => instance, []);
+    React.useImperativeHandle(ref, () => instance, [instance]);
     // NOTE: deliberately no cleanup effect that nulls __onLoad/__onError -
     // tests must be able to fire late events on a stale/unmounted instance to
     // verify the isCurrent guard drops them.
