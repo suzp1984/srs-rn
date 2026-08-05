@@ -88,7 +88,14 @@ export function useHlsSession(): UseHlsSessionResult {
         cleanupAttempt(attempt);
         attemptRef.current = null;
         setHandlers(null);
-        setErrorMessage(event?.error?.message ?? event?.message ?? 'Playback error');
+        setErrorMessage(
+          event?.error?.localizedDescription ??
+            event?.error?.errorString ??
+            event?.error?.error ??
+            event?.error?.message ??
+            event?.message ??
+            'Playback error',
+        );
         setStatus('error');
       },
     };

@@ -172,7 +172,9 @@ describe('HlsPlayerScreen - visible errors', () => {
     const tree = render();
     await pressStart(tree);
     ReactTestRenderer.act(() => {
-      video.__mockVideoInstances[0].__fireOnError({error: {message: 'Network request failed'}});
+      video.__mockVideoInstances[0].__fireOnError({
+        error: {errorString: 'Network request failed', localizedDescription: 'Network request failed'},
+      });
     });
     expect(findByTestID(tree.root, 'hls-player-error').props.children).toContain('Network');
     expect(hasVideo(tree.root)).toBe(false);
