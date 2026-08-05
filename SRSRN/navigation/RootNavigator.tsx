@@ -7,6 +7,8 @@ import {WhipUrlScreen} from '../features/whip/WhipUrlScreen';
 import {PublisherScreen} from '../features/whip/PublisherScreen';
 import {WhepUrlScreen} from '../features/whep/WhepUrlScreen';
 import {PlayerScreen} from '../features/whep/PlayerScreen';
+import {HlsUrlScreen} from '../features/hls/HlsUrlScreen';
+import {HlsPlayerScreen} from '../features/hls/HlsPlayerScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -19,6 +21,8 @@ export function RootNavigator(): React.JSX.Element {
         <Stack.Screen name="Publisher" component={PublisherScreen} options={{title: 'Publisher'}} />
         <Stack.Screen name="WhepUrl" component={WhepUrlScreen} options={{title: 'WHEP URL'}} />
         <Stack.Screen name="Player" component={PlayerScreen} options={{title: 'Player'}} />
+        <Stack.Screen name="HlsUrl" component={HlsUrlScreen} options={{title: 'HLS URL'}} />
+        <Stack.Screen name="HlsPlayer" component={HlsPlayerScreen} options={{title: 'HLS Player'}} />
       </Stack.Navigator>
     </NavigationContainer>
   );

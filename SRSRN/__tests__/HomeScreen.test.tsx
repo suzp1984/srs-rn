@@ -30,6 +30,7 @@ describe('HomeScreen', () => {
     const {tree} = render();
     expect(tree.root.findAllByProps({testID: 'launcher-whip-action'}).length).toBeGreaterThan(0);
     expect(tree.root.findAllByProps({testID: 'launcher-whep-action'}).length).toBeGreaterThan(0);
+    expect(tree.root.findAllByProps({testID: 'launcher-hls-action'}).length).toBeGreaterThan(0);
   });
 
   it('navigates to WhipUrl when the WHIP card action is pressed', () => {
@@ -48,12 +49,20 @@ describe('HomeScreen', () => {
     expect(navigate).toHaveBeenCalledWith('WhepUrl');
   });
 
+  it('navigates to HlsUrl when the HLS card action is pressed', () => {
+    const {tree, navigate} = render();
+    ReactTestRenderer.act(() => {
+      findByTestID(tree.root, 'launcher-hls-action').props.onPress();
+    });
+    expect(navigate).toHaveBeenCalledWith('HlsUrl');
+  });
+
   it('renders an additional launcher entry without layout changes', () => {
     const extra: LauncherFeature = {
-      id: 'hls',
-      title: 'HLS Play',
+      id: 'srt',
+      title: 'SRT Play',
       description: 'Future entry.',
-      actionLabel: 'Open HLS',
+      actionLabel: 'Open SRT',
       color: '#999',
       destination: 'WhipUrl',
     };
@@ -61,6 +70,6 @@ describe('HomeScreen', () => {
     // Use an existence check, not an exact count: React 19's test renderer
     // represents forwardRef host components like View twice, doubling any
     // findAllByProps count on a View testID.
-    expect(tree.root.findAllByProps({testID: 'launcher-hls-action'}).length).toBeGreaterThan(0);
+    expect(tree.root.findAllByProps({testID: 'launcher-srt-action'}).length).toBeGreaterThan(0);
   });
 });
