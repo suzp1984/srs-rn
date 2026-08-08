@@ -39,6 +39,8 @@
 	<string></string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Microphone permission is required for audio streaming</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>SRS RN uses the local network to play SRT streams from your SRS server.</string>
 	<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

@@ -124,3 +124,64 @@ jest.mock('react-native-video', () => {
     },
   };
 });
+
+jest.mock('react-native-vlc-media-player', () => {
+  const React = require('react');
+  const mockVlcInstances = [];
+
+  function makeInstance() {
+    const instance = {
+      stopPlayer: jest.fn(),
+      seek: jest.fn(),
+      resume: jest.fn(),
+      __onPlaying: null,
+      __onError: null,
+      __onLoad: null,
+      __fireOnPlaying(payload) {
+        if (instance.__onPlaying) {
+          instance.__onPlaying(payload);
+        }
+      },
+      __fireOnError(payload) {
+        if (instance.__onError) {
+          instance.__onError(payload);
+        }
+      },
+      __fireOnLoad(payload) {
+        if (instance.__onLoad) {
+          instance.__onLoad(payload);
+        }
+      },
+    };
+    mockVlcInstances.push(instance);
+    return instance;
+  }
+
+  const VLCPlayer = React.forwardRef((props, ref) => {
+    const instanceRef = React.useRef(null);
+    if (instanceRef.current === null) {
+      instanceRef.current = makeInstance();
+    }
+    const instance = instanceRef.current;
+    // Re-bind the latest onPlaying/onError/onLoad on every render so a
+    // per-attempt closure (see useSrtSession) is what __fire* invokes.
+    instance.__onPlaying = props.onPlaying;
+    instance.__onError = props.onError;
+    instance.__onLoad = props.onLoad;
+    React.useImperativeHandle(ref, () => instance, [instance]);
+    // NOTE: deliberately no cleanup effect that nulls the __on* handlers -
+    // tests must be able to fire late events on a stale/unmounted instance to
+    // verify the isCurrent guard drops them.
+    return React.createElement('VLCPlayer', {testID: props.testID});
+  });
+
+  return {
+    __esModule: true,
+    default: VLCPlayer,
+    VLCPlayer,
+    __mockVlcInstances: mockVlcInstances,
+    __resetVlcMocks() {
+      mockVlcInstances.length = 0;
+    },
+  };
+});

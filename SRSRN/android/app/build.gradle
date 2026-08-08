@@ -107,6 +107,32 @@ android {
     }
 }
 
+// react-native-vlc-media-player: react-android and LibVLC both ship
+// libc++_shared.so, and libvlc-all crashes when using the react-android copy,
+// so delete the react-android copy before the native-libs merge task runs.
+// See react-native-vlc-media-player README. (RN >= 0.71 uses
+// "jetified-react-android", not "jetified-react-native".)
+tasks.whenTaskAdded((tas -> {
+    if (tas.name.contains("merge") && tas.name.contains("NativeLibs")) {
+        tasks.named(tas.name) {it
+            doFirst {
+                java.nio.file.Path notNeededDirectory = it.externalLibNativeLibs
+                        .getFiles()
+                        .stream()
+                        .filter(file -> file.toString().contains("jetified-react-android"))
+                        .findAny()
+                        .orElse(null)
+                        .toPath();
+                java.nio.file.Files.walk(notNeededDirectory).forEach(file -> {
+                    if (file.toString().contains("libc++_shared.so")) {
+                        java.nio.file.Files.delete(file);
+                    }
+                });
+            }
+        }
+    }
+}))
+
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
