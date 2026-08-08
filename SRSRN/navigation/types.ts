@@ -6,4 +6,6 @@ export type RootStackParamList = {
   Player: {whepUrl: string};
   HlsUrl: undefined;
   HlsPlayer: {hlsUrl: string};
+  SrtUrl: undefined;
+  SrtPlayer: {srtUrl: string};
 };
