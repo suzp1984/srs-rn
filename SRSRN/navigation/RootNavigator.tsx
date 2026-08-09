@@ -9,6 +9,8 @@ import {WhepUrlScreen} from '../features/whep/WhepUrlScreen';
 import {PlayerScreen} from '../features/whep/PlayerScreen';
 import {HlsUrlScreen} from '../features/hls/HlsUrlScreen';
 import {HlsPlayerScreen} from '../features/hls/HlsPlayerScreen';
+import {SrtUrlScreen} from '../features/srt/SrtUrlScreen';
+import {SrtPlayerScreen} from '../features/srt/SrtPlayerScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -23,6 +25,8 @@ export function RootNavigator(): React.JSX.Element {
         <Stack.Screen name="Player" component={PlayerScreen} options={{title: 'Player'}} />
         <Stack.Screen name="HlsUrl" component={HlsUrlScreen} options={{title: 'HLS URL'}} />
         <Stack.Screen name="HlsPlayer" component={HlsPlayerScreen} options={{title: 'HLS Player'}} />
+        <Stack.Screen name="SrtUrl" component={SrtUrlScreen} options={{title: 'SRT URL'}} />
+        <Stack.Screen name="SrtPlayer" component={SrtPlayerScreen} options={{title: 'SRT Player'}} />
       </Stack.Navigator>
     </NavigationContainer>
   );

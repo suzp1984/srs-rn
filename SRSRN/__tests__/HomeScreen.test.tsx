@@ -31,6 +31,7 @@ describe('HomeScreen', () => {
     expect(tree.root.findAllByProps({testID: 'launcher-whip-action'}).length).toBeGreaterThan(0);
     expect(tree.root.findAllByProps({testID: 'launcher-whep-action'}).length).toBeGreaterThan(0);
     expect(tree.root.findAllByProps({testID: 'launcher-hls-action'}).length).toBeGreaterThan(0);
+    expect(tree.root.findAllByProps({testID: 'launcher-srt-action'}).length).toBeGreaterThan(0);
   });
 
   it('navigates to WhipUrl when the WHIP card action is pressed', () => {
@@ -57,12 +58,20 @@ describe('HomeScreen', () => {
     expect(navigate).toHaveBeenCalledWith('HlsUrl');
   });
 
+  it('navigates to SrtUrl when the SRT card action is pressed', () => {
+    const {tree, navigate} = render();
+    ReactTestRenderer.act(() => {
+      findByTestID(tree.root, 'launcher-srt-action').props.onPress();
+    });
+    expect(navigate).toHaveBeenCalledWith('SrtUrl');
+  });
+
   it('renders an additional launcher entry without layout changes', () => {
     const extra: LauncherFeature = {
-      id: 'srt',
-      title: 'SRT Play',
+      id: 'dash',
+      title: 'DASH Play',
       description: 'Future entry.',
-      actionLabel: 'Open SRT',
+      actionLabel: 'Open DASH',
       color: '#999',
       destination: 'WhipUrl',
     };
@@ -70,6 +79,6 @@ describe('HomeScreen', () => {
     // Use an existence check, not an exact count: React 19's test renderer
     // represents forwardRef host components like View twice, doubling any
     // findAllByProps count on a View testID.
-    expect(tree.root.findAllByProps({testID: 'launcher-srt-action'}).length).toBeGreaterThan(0);
+    expect(tree.root.findAllByProps({testID: 'launcher-dash-action'}).length).toBeGreaterThan(0);
   });
 });

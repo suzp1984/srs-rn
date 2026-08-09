@@ -2,7 +2,7 @@ import type {RootStackParamList} from '../navigation/types';
 
 export type LauncherDestination = Extract<
   keyof RootStackParamList,
-  'WhipUrl' | 'WhepUrl' | 'HlsUrl'
+  'WhipUrl' | 'WhepUrl' | 'HlsUrl' | 'SrtUrl'
 >;
 
 export type LauncherFeature = {
@@ -38,5 +38,13 @@ export const LAUNCHER_FEATURES: LauncherFeature[] = [
     actionLabel: 'Open HLS',
     color: '#b26a00',
     destination: 'HlsUrl',
+  },
+  {
+    id: 'srt',
+    title: 'SRT Play',
+    description: 'Play an SRT stream from an SRS server via VLC.',
+    actionLabel: 'Open SRT',
+    color: '#7a4fbf',
+    destination: 'SrtUrl',
   },
 ];
