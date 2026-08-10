@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button, StyleSheet, Text, View} from 'react-native';
-import VLCPlayer from 'react-native-vlc-media-player';
+import {VLCPlayer} from 'react-native-vlc-media-player';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import type {RootStackParamList} from '../../navigation/types';
 import {useSrtSession} from './useSrtSession';
