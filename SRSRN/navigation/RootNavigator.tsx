@@ -11,6 +11,8 @@ import {HlsUrlScreen} from '../features/hls/HlsUrlScreen';
 import {HlsPlayerScreen} from '../features/hls/HlsPlayerScreen';
 import {SrtUrlScreen} from '../features/srt/SrtUrlScreen';
 import {SrtPlayerScreen} from '../features/srt/SrtPlayerScreen';
+import {DashUrlScreen} from '../features/dash/DashUrlScreen';
+import {DashPlayerScreen} from '../features/dash/DashPlayerScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -27,6 +29,8 @@ export function RootNavigator(): React.JSX.Element {
         <Stack.Screen name="HlsPlayer" component={HlsPlayerScreen} options={{title: 'HLS Player'}} />
         <Stack.Screen name="SrtUrl" component={SrtUrlScreen} options={{title: 'SRT URL'}} />
         <Stack.Screen name="SrtPlayer" component={SrtPlayerScreen} options={{title: 'SRT Player'}} />
+        <Stack.Screen name="DashUrl" component={DashUrlScreen} options={{title: 'DASH URL'}} />
+        <Stack.Screen name="DashPlayer" component={DashPlayerScreen} options={{title: 'DASH Player'}} />
       </Stack.Navigator>
     </NavigationContainer>
   );

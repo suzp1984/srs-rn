@@ -2,7 +2,7 @@ import type {RootStackParamList} from '../navigation/types';
 
 export type LauncherDestination = Extract<
   keyof RootStackParamList,
-  'WhipUrl' | 'WhepUrl' | 'HlsUrl' | 'SrtUrl'
+  'WhipUrl' | 'WhepUrl' | 'HlsUrl' | 'SrtUrl' | 'DashUrl'
 >;
 
 export type LauncherFeature = {
@@ -46,5 +46,13 @@ export const LAUNCHER_FEATURES: LauncherFeature[] = [
     actionLabel: 'Open SRT',
     color: '#7a4fbf',
     destination: 'SrtUrl',
+  },
+  {
+    id: 'dash',
+    title: 'DASH Play',
+    description: 'Play a DASH stream from an SRS server via VLC.',
+    actionLabel: 'Open DASH',
+    color: '#0e7490',
+    destination: 'DashUrl',
   },
 ];
