@@ -8,4 +8,6 @@ export type RootStackParamList = {
   HlsPlayer: {hlsUrl: string};
   SrtUrl: undefined;
   SrtPlayer: {srtUrl: string};
+  DashUrl: undefined;
+  DashPlayer: {dashUrl: string};
 };
