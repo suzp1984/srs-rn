@@ -10,4 +10,6 @@ export type RootStackParamList = {
   SrtPlayer: {srtUrl: string};
   DashUrl: undefined;
   DashPlayer: {dashUrl: string};
+  RtmpUrl: undefined;
+  RtmpPlayer: {rtmpUrl: string};
 };
