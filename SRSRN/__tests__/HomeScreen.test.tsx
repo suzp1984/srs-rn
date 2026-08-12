@@ -59,12 +59,16 @@ describe('HomeScreen', () => {
     expect(navigate).toHaveBeenCalledWith('HlsUrl');
   });
 
-  it('navigates to SrtUrl when the SRT card action is pressed', () => {
+  it('does not navigate and shows a disabled badge for the SRT card', () => {
     const {tree, navigate} = render();
+    // SRT is disabled in the launcher config: pressing its action must not
+    // navigate, and a Disabled badge + reason must be rendered.
     ReactTestRenderer.act(() => {
       findByTestID(tree.root, 'launcher-srt-action').props.onPress();
     });
-    expect(navigate).toHaveBeenCalledWith('SrtUrl');
+    expect(navigate).not.toHaveBeenCalled();
+    expect(tree.root.findAllByProps({testID: 'launcher-srt-disabled'}).length).toBeGreaterThan(0);
+    expect(tree.root.findAllByProps({testID: 'launcher-srt-reason'}).length).toBeGreaterThan(0);
   });
 
   it('navigates to DashUrl when the DASH card action is pressed', () => {

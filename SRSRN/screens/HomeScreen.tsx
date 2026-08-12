@@ -10,19 +10,40 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Home'> & {
 
 export function HomeScreen({navigation, features}: Props): React.JSX.Element {
   const list = features ?? LAUNCHER_FEATURES;
-  const renderItem = ({item}: {item: LauncherFeature}) => (
-    <View
-      testID="launcher-card"
-      style={[styles.card, {borderColor: item.color}]}>
-      <Text style={styles.title}>{item.title}</Text>
-      <Text style={styles.description}>{item.description}</Text>
-      <Button
-        testID={`launcher-${item.id}-action`}
-        title={item.actionLabel}
-        onPress={() => navigation.navigate(item.destination)}
-      />
-    </View>
-  );
+  const renderItem = ({item}: {item: LauncherFeature}) => {
+    const disabled = item.disabled === true;
+    return (
+      <View
+        testID="launcher-card"
+        style={[styles.card, {borderColor: item.color}, disabled && styles.cardDisabled]}>
+        <View style={styles.titleRow}>
+          <Text style={styles.title}>{item.title}</Text>
+          {disabled && (
+            <Text testID={`launcher-${item.id}-disabled`} style={styles.disabledBadge}>
+              Disabled
+            </Text>
+          )}
+        </View>
+        <Text style={styles.description}>{item.description}</Text>
+        {disabled && item.disabledReason && (
+          <Text testID={`launcher-${item.id}-reason`} style={styles.disabledReason}>
+            {item.disabledReason}
+          </Text>
+        )}
+        <Button
+          testID={`launcher-${item.id}-action`}
+          title={item.actionLabel}
+          disabled={disabled}
+          onPress={() => {
+            if (disabled) {
+              return;
+            }
+            navigation.navigate(item.destination);
+          }}
+        />
+      </View>
+    );
+  };
   return (
     <View style={styles.container}>
       <FlatList
@@ -38,6 +59,19 @@ export function HomeScreen({navigation, features}: Props): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {padding: 16},
   card: {flex: 1, borderWidth: 2, borderRadius: 8, padding: 12, marginBottom: 12, gap: 8},
+  cardDisabled: {opacity: 0.5},
+  titleRow: {flexDirection: 'row', alignItems: 'center', gap: 8},
   title: {fontSize: 16, fontWeight: '700'},
   description: {fontSize: 14, color: '#444'},
+  disabledBadge: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#fff',
+    backgroundColor: '#999',
+    borderRadius: 4,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    overflow: 'hidden',
+  },
+  disabledReason: {fontSize: 12, color: '#900'},
 });

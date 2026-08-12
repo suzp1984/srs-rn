@@ -12,6 +12,12 @@ export type LauncherFeature = {
   actionLabel: string;
   color: string;
   destination: LauncherDestination;
+  // When true, the launcher card is rendered greyed-out with a "Disabled"
+  // badge and its action button does not navigate. Used for features that are
+  // wired in but non-functional on the current build (e.g. SRT, whose libVLC
+  // stack lacks libsrt). `disabledReason` is shown as user-facing text.
+  disabled?: boolean;
+  disabledReason?: string;
 };
 
 export const LAUNCHER_FEATURES: LauncherFeature[] = [
@@ -46,6 +52,8 @@ export const LAUNCHER_FEATURES: LauncherFeature[] = [
     actionLabel: 'Open SRT',
     color: '#7a4fbf',
     destination: 'SrtUrl',
+    disabled: true,
+    disabledReason: 'SRT playback is not yet supported in this build.',
   },
   {
     id: 'dash',
