@@ -33,6 +33,7 @@ describe('HomeScreen', () => {
     expect(tree.root.findAllByProps({testID: 'launcher-hls-action'}).length).toBeGreaterThan(0);
     expect(tree.root.findAllByProps({testID: 'launcher-srt-action'}).length).toBeGreaterThan(0);
     expect(tree.root.findAllByProps({testID: 'launcher-dash-action'}).length).toBeGreaterThan(0);
+    expect(tree.root.findAllByProps({testID: 'launcher-rtmp-action'}).length).toBeGreaterThan(0);
   });
 
   it('navigates to WhipUrl when the WHIP card action is pressed', () => {
@@ -79,12 +80,20 @@ describe('HomeScreen', () => {
     expect(navigate).toHaveBeenCalledWith('DashUrl');
   });
 
+  it('navigates to RtmpUrl when the RTMP card action is pressed', () => {
+    const {tree, navigate} = render();
+    ReactTestRenderer.act(() => {
+      findByTestID(tree.root, 'launcher-rtmp-action').props.onPress();
+    });
+    expect(navigate).toHaveBeenCalledWith('RtmpUrl');
+  });
+
   it('renders an additional launcher entry without layout changes', () => {
     const extra: LauncherFeature = {
-      id: 'rtmp',
-      title: 'RTMP Publish',
+      id: 'flv',
+      title: 'HTTP-FLV Play',
       description: 'Future entry.',
-      actionLabel: 'Open RTMP',
+      actionLabel: 'Open FLV',
       color: '#999',
       destination: 'WhipUrl',
     };
@@ -92,6 +101,6 @@ describe('HomeScreen', () => {
     // Use an existence check, not an exact count: React 19's test renderer
     // represents forwardRef host components like View twice, doubling any
     // findAllByProps count on a View testID.
-    expect(tree.root.findAllByProps({testID: 'launcher-rtmp-action'}).length).toBeGreaterThan(0);
+    expect(tree.root.findAllByProps({testID: 'launcher-flv-action'}).length).toBeGreaterThan(0);
   });
 });

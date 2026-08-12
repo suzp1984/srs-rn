@@ -13,6 +13,8 @@ import {SrtUrlScreen} from '../features/srt/SrtUrlScreen';
 import {SrtPlayerScreen} from '../features/srt/SrtPlayerScreen';
 import {DashUrlScreen} from '../features/dash/DashUrlScreen';
 import {DashPlayerScreen} from '../features/dash/DashPlayerScreen';
+import {RtmpUrlScreen} from '../features/rtmp/RtmpUrlScreen';
+import {RtmpPlayerScreen} from '../features/rtmp/RtmpPlayerScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -31,6 +33,8 @@ export function RootNavigator(): React.JSX.Element {
         <Stack.Screen name="SrtPlayer" component={SrtPlayerScreen} options={{title: 'SRT Player'}} />
         <Stack.Screen name="DashUrl" component={DashUrlScreen} options={{title: 'DASH URL'}} />
         <Stack.Screen name="DashPlayer" component={DashPlayerScreen} options={{title: 'DASH Player'}} />
+        <Stack.Screen name="RtmpUrl" component={RtmpUrlScreen} options={{title: 'RTMP URL'}} />
+        <Stack.Screen name="RtmpPlayer" component={RtmpPlayerScreen} options={{title: 'RTMP Player'}} />
       </Stack.Navigator>
     </NavigationContainer>
   );
