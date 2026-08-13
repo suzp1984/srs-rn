@@ -12,4 +12,6 @@ export type RootStackParamList = {
   DashPlayer: {dashUrl: string};
   RtmpUrl: undefined;
   RtmpPlayer: {rtmpUrl: string};
+  RtmpPublishUrl: undefined;
+  RtmpPublisher: {rtmpUrl: string};
 };
