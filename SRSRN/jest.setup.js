@@ -185,3 +185,81 @@ jest.mock('react-native-vlc-media-player', () => {
     },
   };
 });
+
+jest.mock('react-native-rtmp-publisher', () => {
+  const React = require('react');
+  const mockRtmpInstances = [];
+
+  function makeInstance() {
+    const instance = {
+      startStream: jest.fn(() => Promise.resolve()),
+      stopStream: jest.fn(() => Promise.resolve()),
+      isStreaming: jest.fn(() => Promise.resolve(false)),
+      isCameraOnPreview: jest.fn(() => Promise.resolve(true)),
+      getPublishURL: jest.fn(() => Promise.resolve('')),
+      hasCongestion: jest.fn(() => Promise.resolve(false)),
+      isAudioPrepared: jest.fn(() => Promise.resolve(true)),
+      isVideoPrepared: jest.fn(() => Promise.resolve(true)),
+      isMuted: jest.fn(() => Promise.resolve(false)),
+      mute: jest.fn(() => Promise.resolve()),
+      unmute: jest.fn(() => Promise.resolve()),
+      switchCamera: jest.fn(() => Promise.resolve()),
+      toggleFlash: jest.fn(() => Promise.resolve()),
+      setAudioInput: jest.fn(() => Promise.resolve()),
+      __onConnectionStarted: null,
+      __onConnectionSuccess: null,
+      __onConnectionFailed: null,
+      __onDisconnect: null,
+      __fireOnConnectionStarted(payload) {
+        if (instance.__onConnectionStarted) {
+          instance.__onConnectionStarted(payload);
+        }
+      },
+      __fireOnConnectionSuccess(payload) {
+        if (instance.__onConnectionSuccess) {
+          instance.__onConnectionSuccess(payload);
+        }
+      },
+      __fireOnConnectionFailed(payload) {
+        if (instance.__onConnectionFailed) {
+          instance.__onConnectionFailed(payload);
+        }
+      },
+      __fireOnDisconnect(payload) {
+        if (instance.__onDisconnect) {
+          instance.__onDisconnect(payload);
+        }
+      },
+    };
+    mockRtmpInstances.push(instance);
+    return instance;
+  }
+
+  const RTMPPublisher = React.forwardRef((props, ref) => {
+    const instanceRef = React.useRef(null);
+    if (instanceRef.current === null) {
+      instanceRef.current = makeInstance();
+    }
+    const instance = instanceRef.current;
+    // Re-bind the latest callbacks on every render so a per-attempt closure
+    // (see useRtmpPublisherSession) is what __fire* invokes.
+    instance.__onConnectionStarted = props.onConnectionStarted;
+    instance.__onConnectionSuccess = props.onConnectionSuccess;
+    instance.__onConnectionFailed = props.onConnectionFailed;
+    instance.__onDisconnect = props.onDisconnect;
+    React.useImperativeHandle(ref, () => instance, [instance]);
+    // NOTE: deliberately no cleanup effect that nulls the __on* handlers -
+    // tests must be able to fire late events on a stale/unmounted instance to
+    // verify the isCurrent guard drops them.
+    return React.createElement('RTMPPublisher', {testID: props.testID});
+  });
+
+  return {
+    __esModule: true,
+    default: RTMPPublisher,
+    __mockRtmpInstances: mockRtmpInstances,
+    __resetRtmpMocks() {
+      mockRtmpInstances.length = 0;
+    },
+  };
+});

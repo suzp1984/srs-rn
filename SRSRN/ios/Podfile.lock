@@ -1,9 +1,12 @@
 PODS:
   - FBLazyVector (0.86.0)
+  - HaishinKit (1.2.7):
+    - Logboard (~> 2.2.2)
   - hermes-engine (250829098.0.14):
     - hermes-engine/Pre-built (= 250829098.0.14)
   - hermes-engine/Pre-built (250829098.0.14)
   - JitsiWebRTC (124.0.2)
+  - Logboard (2.2.4)
   - MobileVLCKit (3.5.1)
   - RCTDeprecation (0.86.0)
   - RCTRequired (0.86.0)
@@ -1428,6 +1431,9 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
+  - react-native-rtmp-publisher (0.4.7):
+    - HaishinKit (~> 1.2.7)
+    - React-Core
   - react-native-safe-area-context (5.8.0):
     - hermes-engine
     - RCTRequired
@@ -2081,6 +2087,7 @@ DEPENDENCIES:
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
   - React-mutationobservernativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/mutationobserver`)
+  - react-native-rtmp-publisher (from `../node_modules/react-native-rtmp-publisher`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-video (from `../node_modules/react-native-video`)
   - react-native-vlc-media-player (from `../node_modules/react-native-vlc-media-player`)
@@ -2126,7 +2133,9 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - HaishinKit
     - JitsiWebRTC
+    - Logboard
     - MobileVLCKit
 
 EXTERNAL SOURCES:
@@ -2209,6 +2218,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
   React-mutationobservernativemodule:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/mutationobserver"
+  react-native-rtmp-publisher:
+    :path: "../node_modules/react-native-rtmp-publisher"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-video:
@@ -2296,8 +2307,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   FBLazyVector: b3e7ad108f0d882e30445c5527d774e3fd432f3d
+  HaishinKit: 5463efd52fa4de2018db95547a5b09ce50495444
   hermes-engine: 7e57818d86570e39ea5b662261763012ff9b3f41
   JitsiWebRTC: b47805ab5668be38e7ee60e2258f49badfe8e1d0
+  Logboard: 660364cbd45aa42fd79637f0cdfba3c950c613d8
   MobileVLCKit: 144d5f565512d1147d63b0fa1379231b3fd66535
   RCTDeprecation: 2a74a2c57675e64419bd89078efde81f7c1de90b
   RCTRequired: 30451112e6fef4e6f31b4e7eee0845156e35e4b0
@@ -2336,6 +2349,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: c058c051f571589e37a29bce18d0e9b730faa9d0
   React-microtasksnativemodule: 03752e60738a797bb49f4d6cb0291dfa398099b8
   React-mutationobservernativemodule: 2e568e13c98bd185fe83266795233fa7ad2cbc19
+  react-native-rtmp-publisher: 50571f7db2de0555316b5d125d650c5af21e14c6
   react-native-safe-area-context: c1eb308f4b36372a4de4b3bdaa8ed695ec3dd461
   react-native-video: 84f5283aaed3484b5b4914095ab16a9dd3477cca
   react-native-vlc-media-player: 0f9860bded57cd6764ac55b5c0e97347069cb40a

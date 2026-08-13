@@ -15,6 +15,7 @@
     "react": "19.2.3",
     "react-native": "0.86.0",
     "react-native-gesture-handler": "^3.1.0",
+    "react-native-rtmp-publisher": "0.4.7",
     "react-native-safe-area-context": "^5.5.2",
     "react-native-screens": "^4.26.2",
     "react-native-video": "6.19.2",

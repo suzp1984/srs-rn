@@ -2,6 +2,7 @@ import UIKit
 import React
 import React_RCTAppDelegate
 import ReactAppDependencyProvider
+import AVFoundation
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -28,6 +29,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       in: window,
       launchOptions: launchOptions
     )
+
+    // react-native-rtmp-publisher: configure AVAudioSession for camera+mic
+    // capture (PlayAndRecord, default to speaker, allow Bluetooth). This is
+    // the Swift translation of the library's documented AppDelegate.mm setup.
+    let audioSession = AVAudioSession.sharedInstance()
+    try? audioSession.setCategory(
+      .playAndRecord,
+      mode: .voiceChat,
+      options: [.defaultToSpeaker, .allowBluetooth]
+    )
+    try? audioSession.setActive(true)
 
     return true
   }
