@@ -34,6 +34,7 @@ describe('HomeScreen', () => {
     expect(tree.root.findAllByProps({testID: 'launcher-srt-action'}).length).toBeGreaterThan(0);
     expect(tree.root.findAllByProps({testID: 'launcher-dash-action'}).length).toBeGreaterThan(0);
     expect(tree.root.findAllByProps({testID: 'launcher-rtmp-action'}).length).toBeGreaterThan(0);
+    expect(tree.root.findAllByProps({testID: 'launcher-rtmp_publish-action'}).length).toBeGreaterThan(0);
   });
 
   it('navigates to WhipUrl when the WHIP card action is pressed', () => {
@@ -86,6 +87,14 @@ describe('HomeScreen', () => {
       findByTestID(tree.root, 'launcher-rtmp-action').props.onPress();
     });
     expect(navigate).toHaveBeenCalledWith('RtmpUrl');
+  });
+
+  it('navigates to RtmpPublishUrl when the RTMP Publish card action is pressed', () => {
+    const {tree, navigate} = render();
+    ReactTestRenderer.act(() => {
+      findByTestID(tree.root, 'launcher-rtmp_publish-action').props.onPress();
+    });
+    expect(navigate).toHaveBeenCalledWith('RtmpPublishUrl');
   });
 
   it('renders an additional launcher entry without layout changes', () => {

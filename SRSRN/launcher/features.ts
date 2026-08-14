@@ -2,7 +2,7 @@ import type {RootStackParamList} from '../navigation/types';
 
 export type LauncherDestination = Extract<
   keyof RootStackParamList,
-  'WhipUrl' | 'WhepUrl' | 'HlsUrl' | 'SrtUrl' | 'DashUrl' | 'RtmpUrl'
+  'WhipUrl' | 'WhepUrl' | 'HlsUrl' | 'SrtUrl' | 'DashUrl' | 'RtmpUrl' | 'RtmpPublishUrl'
 >;
 
 export type LauncherFeature = {
@@ -70,5 +70,13 @@ export const LAUNCHER_FEATURES: LauncherFeature[] = [
     actionLabel: 'Open RTMP',
     color: '#be185d',
     destination: 'RtmpUrl',
+  },
+  {
+    id: 'rtmp_publish',
+    title: 'RTMP Publish',
+    description: 'Publish camera and microphone to an SRS server via RTMP.',
+    actionLabel: 'Open RTMP Pub',
+    color: '#4338ca',
+    destination: 'RtmpPublishUrl',
   },
 ];
