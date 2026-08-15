@@ -1,0 +1,12 @@
+diff --git a/node_modules/react-native-rtmp-publisher/android/build.gradle b/node_modules/react-native-rtmp-publisher/android/build.gradle
+index 619468a..a9f1ba3 100644
+--- a/node_modules/react-native-rtmp-publisher/android/build.gradle
++++ b/node_modules/react-native-rtmp-publisher/android/build.gradle
+@@ -50,7 +50,6 @@ repositories {
+   }
+   google()
+   mavenCentral()
+-  jcenter()
+   maven { url 'https://www.jitpack.io' }
+ }
+ 
