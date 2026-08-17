@@ -30,7 +30,7 @@ export function PlayerScreen({route}: Props): React.JSX.Element {
           <RTCView
             testID="player-video"
             streamURL={stream.toURL()}
-            objectFit="cover"
+            objectFit="contain"
             style={styles.video}
           />
         </View>

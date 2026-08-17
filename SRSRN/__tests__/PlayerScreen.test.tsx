@@ -126,6 +126,10 @@ describe('PlayerScreen - happy path', () => {
     const remoteTrack = {id: 'remote-video', kind: 'video', stop: jest.fn()};
     fireTrackEvent(pc, remoteTrack);
     expect(hasVideo(tree.root)).toBe(true);
+    // The remote video must preserve its aspect ratio (letterbox), not crop
+    // to fill the frame. objectFit="cover" would stretch/crop a mismatched
+    // source to the 300x400 player box.
+    expect(findByTestID(tree.root, 'player-video').props.objectFit).toBe('contain');
   });
 });
 
