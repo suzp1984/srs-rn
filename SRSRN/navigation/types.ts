@@ -16,4 +16,6 @@ export type RootStackParamList = {
   RtmpPublisher: {rtmpUrl: string};
   FlvUrl: undefined;
   FlvPlayer: {flvUrl: string};
+  TsUrl: undefined;
+  TsPlayer: {tsUrl: string};
 };

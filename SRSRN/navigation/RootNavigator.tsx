@@ -19,6 +19,8 @@ import {RtmpPublishUrlScreen} from '../features/rtmp_publish/RtmpPublishUrlScree
 import {RtmpPublisherScreen} from '../features/rtmp_publish/RtmpPublisherScreen';
 import {FlvUrlScreen} from '../features/flv/FlvUrlScreen';
 import {FlvPlayerScreen} from '../features/flv/FlvPlayerScreen';
+import {TsUrlScreen} from '../features/ts/TsUrlScreen';
+import {TsPlayerScreen} from '../features/ts/TsPlayerScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -43,6 +45,8 @@ export function RootNavigator(): React.JSX.Element {
         <Stack.Screen name="RtmpPublisher" component={RtmpPublisherScreen} options={{title: 'RTMP Publisher'}} />
         <Stack.Screen name="FlvUrl" component={FlvUrlScreen} options={{title: 'HTTP-FLV URL'}} />
         <Stack.Screen name="FlvPlayer" component={FlvPlayerScreen} options={{title: 'HTTP-FLV Player'}} />
+        <Stack.Screen name="TsUrl" component={TsUrlScreen} options={{title: 'HTTP-TS URL'}} />
+        <Stack.Screen name="TsPlayer" component={TsPlayerScreen} options={{title: 'HTTP-TS Player'}} />
       </Stack.Navigator>
     </NavigationContainer>
   );
