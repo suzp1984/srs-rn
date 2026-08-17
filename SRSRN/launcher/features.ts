@@ -2,7 +2,7 @@ import type {RootStackParamList} from '../navigation/types';
 
 export type LauncherDestination = Extract<
   keyof RootStackParamList,
-  'WhipUrl' | 'WhepUrl' | 'HlsUrl' | 'SrtUrl' | 'DashUrl' | 'RtmpUrl' | 'RtmpPublishUrl'
+  'WhipUrl' | 'WhepUrl' | 'HlsUrl' | 'SrtUrl' | 'DashUrl' | 'RtmpUrl' | 'RtmpPublishUrl' | 'FlvUrl'
 >;
 
 export type LauncherFeature = {
@@ -78,5 +78,13 @@ export const LAUNCHER_FEATURES: LauncherFeature[] = [
     actionLabel: 'Open RTMP Pub',
     color: '#4338ca',
     destination: 'RtmpPublishUrl',
+  },
+  {
+    id: 'flv',
+    title: 'HTTP-FLV Play',
+    description: 'Play an HTTP-FLV stream from an SRS server via VLC.',
+    actionLabel: 'Open HTTP-FLV',
+    color: '#0d9488',
+    destination: 'FlvUrl',
   },
 ];

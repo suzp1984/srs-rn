@@ -35,6 +35,7 @@ describe('HomeScreen', () => {
     expect(tree.root.findAllByProps({testID: 'launcher-dash-action'}).length).toBeGreaterThan(0);
     expect(tree.root.findAllByProps({testID: 'launcher-rtmp-action'}).length).toBeGreaterThan(0);
     expect(tree.root.findAllByProps({testID: 'launcher-rtmp_publish-action'}).length).toBeGreaterThan(0);
+    expect(tree.root.findAllByProps({testID: 'launcher-flv-action'}).length).toBeGreaterThan(0);
   });
 
   it('navigates to WhipUrl when the WHIP card action is pressed', () => {
@@ -97,12 +98,20 @@ describe('HomeScreen', () => {
     expect(navigate).toHaveBeenCalledWith('RtmpPublishUrl');
   });
 
+  it('navigates to FlvUrl when the HTTP-FLV card action is pressed', () => {
+    const {tree, navigate} = render();
+    ReactTestRenderer.act(() => {
+      findByTestID(tree.root, 'launcher-flv-action').props.onPress();
+    });
+    expect(navigate).toHaveBeenCalledWith('FlvUrl');
+  });
+
   it('renders an additional launcher entry without layout changes', () => {
     const extra: LauncherFeature = {
-      id: 'flv',
-      title: 'HTTP-FLV Play',
+      id: 'future_proto',
+      title: 'Future Protocol',
       description: 'Future entry.',
-      actionLabel: 'Open FLV',
+      actionLabel: 'Open Future',
       color: '#999',
       destination: 'WhipUrl',
     };
@@ -110,6 +119,6 @@ describe('HomeScreen', () => {
     // Use an existence check, not an exact count: React 19's test renderer
     // represents forwardRef host components like View twice, doubling any
     // findAllByProps count on a View testID.
-    expect(tree.root.findAllByProps({testID: 'launcher-flv-action'}).length).toBeGreaterThan(0);
+    expect(tree.root.findAllByProps({testID: 'launcher-future_proto-action'}).length).toBeGreaterThan(0);
   });
 });
