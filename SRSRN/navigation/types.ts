@@ -18,4 +18,6 @@ export type RootStackParamList = {
   FlvPlayer: {flvUrl: string};
   TsUrl: undefined;
   TsPlayer: {tsUrl: string};
+  RtspUrl: undefined;
+  RtspPlayer: {rtspUrl: string};
 };
