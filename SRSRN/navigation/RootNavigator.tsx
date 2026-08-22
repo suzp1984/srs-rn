@@ -21,6 +21,8 @@ import {FlvUrlScreen} from '../features/flv/FlvUrlScreen';
 import {FlvPlayerScreen} from '../features/flv/FlvPlayerScreen';
 import {TsUrlScreen} from '../features/ts/TsUrlScreen';
 import {TsPlayerScreen} from '../features/ts/TsPlayerScreen';
+import {RtspUrlScreen} from '../features/rtsp/RtspUrlScreen';
+import {RtspPlayerScreen} from '../features/rtsp/RtspPlayerScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -47,6 +49,8 @@ export function RootNavigator(): React.JSX.Element {
         <Stack.Screen name="FlvPlayer" component={FlvPlayerScreen} options={{title: 'HTTP-FLV Player'}} />
         <Stack.Screen name="TsUrl" component={TsUrlScreen} options={{title: 'HTTP-TS URL'}} />
         <Stack.Screen name="TsPlayer" component={TsPlayerScreen} options={{title: 'HTTP-TS Player'}} />
+        <Stack.Screen name="RtspUrl" component={RtspUrlScreen} options={{title: 'RTSP URL'}} />
+        <Stack.Screen name="RtspPlayer" component={RtspPlayerScreen} options={{title: 'RTSP Player'}} />
       </Stack.Navigator>
     </NavigationContainer>
   );
