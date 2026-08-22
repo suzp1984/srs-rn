@@ -1,4 +1,4 @@
-import {DEFAULT_RTSP_URL, validateRtspUrl} from '../features/rtsp/validation';
+import {DEFAULT_RTSP_URL, parseRtspUrlManually, validateRtspUrl} from '../features/rtsp/validation';
 
 describe('validateRtspUrl', () => {
   it('rejects empty input', () => {
@@ -85,5 +85,76 @@ describe('validateRtspUrl', () => {
   it('does not collide with the RTMP or TS defaults', () => {
     expect(DEFAULT_RTSP_URL).not.toBe('rtmp://192.168.1.100:1935/live/livestream');
     expect(DEFAULT_RTSP_URL).not.toBe('http://192.168.1.100:8080/live/livestream.ts');
+  });
+  // Regression: Hermes's URL parser returns an empty hostname for some
+  // valid rtsp:// URLs. validateRtspUrl must still accept them.
+  it('accepts a valid rtsp URL with an alternate host and port (Hermes regression)', () => {
+    expect(validateRtspUrl('rtsp://192.168.12.107:8554/live/livestream')).toEqual({
+      ok: true,
+      url: 'rtsp://192.168.12.107:8554/live/livestream',
+    });
+  });
+});
+
+describe('parseRtspUrlManually (Hermes fallback)', () => {
+  it('parses host and path from a valid rtsp URL', () => {
+    expect(parseRtspUrlManually('rtsp://192.168.12.107:8554/live/livestream')).toEqual({
+      host: '192.168.12.107',
+      path: '/live/livestream',
+    });
+  });
+  it('parses a URL with no port', () => {
+    expect(parseRtspUrlManually('rtsp://host/live/livestream')).toEqual({
+      host: 'host',
+      path: '/live/livestream',
+    });
+  });
+  it('parses a URL with a bare-slash path', () => {
+    expect(parseRtspUrlManually('rtsp://host:554/')).toEqual({
+      host: 'host',
+      path: '/',
+    });
+  });
+  it('parses a URL with no path (path empty string)', () => {
+    expect(parseRtspUrlManually('rtsp://host:554')).toEqual({
+      host: 'host',
+      path: '',
+    });
+  });
+  it('strips URL-embedded credentials before extracting the host', () => {
+    expect(parseRtspUrlManually('rtsp://user:pass@192.168.1.100:554/live/livestream')).toEqual({
+      host: '192.168.1.100',
+      path: '/live/livestream',
+    });
+  });
+  it('parses a query string into the path group', () => {
+    expect(parseRtspUrlManually('rtsp://host:554/live/stream?param=value')).toEqual({
+      host: 'host',
+      path: '/live/stream',
+    });
+  });
+  it('handles uppercase scheme (case-insensitive)', () => {
+    expect(parseRtspUrlManually('RTSP://HOST:554/LIVE/LIVESTREAM')).toEqual({
+      host: 'HOST',
+      path: '/LIVE/LIVESTREAM',
+    });
+  });
+  it('parses a bracketed IPv6 host', () => {
+    expect(parseRtspUrlManually('rtsp://[::1]:8554/live/livestream')).toEqual({
+      host: '[::1]',
+      path: '/live/livestream',
+    });
+  });
+  it('returns null for a URL with no host', () => {
+    expect(parseRtspUrlManually('rtsp:///live/livestream')).toBeNull();
+  });
+  it('returns null for an rtsps:// URL', () => {
+    expect(parseRtspUrlManually('rtsps://host:322/live/livestream')).toBeNull();
+  });
+  it('returns null for a non-rtsp URL', () => {
+    expect(parseRtspUrlManually('http://example.com/stream')).toBeNull();
+  });
+  it('returns null for an unparseable string', () => {
+    expect(parseRtspUrlManually('not a url')).toBeNull();
   });
 });
